@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 public class DictionaryController {
 
@@ -38,11 +39,10 @@ public class DictionaryController {
 
     @GetMapping("/length/")
     @ResponseBody
-    DictionaryParams getLength() {
+     DictionaryParams getLength() {
         return dictionaryParams;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/words/")
     @ResponseBody
     List<String> getMatchingWords(@RequestParam(value="letters") List<Character> letters) {
