@@ -1,11 +1,12 @@
 package pl.wyrazowka.server;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
@@ -14,12 +15,34 @@ import java.util.List;
 public class DictionaryController {
 
     private final List<String> dictionary;
+    private final DictionaryParams dictionaryParams;
+    public DictionaryController(Config config) throws IOException, EmptyDictionaryException {
+        File file = new File(config.getPath());
+        dictionary =  Files.readAllLines(file.toPath());
+        if(dictionary.isEmpty()) {
+            throw new EmptyDictionaryException("The dictionary is empty");
+        }
 
-    public DictionaryController() throws IOException {
-        ClassPathResource resource = new ClassPathResource("dictionary.txt");
-        dictionary = Files.readAllLines(resource.getFile().toPath());
+        int minLength = dictionary.stream()
+                .map(String::length)
+                .min(Integer::compare)
+                .get();
+
+        int maxLength = dictionary.stream()
+                .map(String::length)
+                .max(Integer::compare)
+                .get();
+
+        dictionaryParams = new DictionaryParams(minLength, maxLength);
     }
 
+    @GetMapping("/length/")
+    @ResponseBody
+    DictionaryParams getLength() {
+        return dictionaryParams;
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/words/")
     @ResponseBody
     List<String> getMatchingWords(@RequestParam(value="letters") List<Character> letters) {
