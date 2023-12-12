@@ -1,17 +1,15 @@
 package pl.wyrazowka.server;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
+@ConfigurationProperties("dictionary")
 public class Config {
-    private final String dictionaryPath;
+    private final String path;
 
-    Config(@Value("${app.dictionary.path}") String path) {
-        this.dictionaryPath = path;
+    public String getPath() {
+        return this.path;
     }
 
-    String getPath() {
-        return dictionaryPath;
+    public Config(String path) {
+        this.path = path;
     }
 }
