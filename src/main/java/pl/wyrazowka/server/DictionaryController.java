@@ -56,7 +56,7 @@ public class DictionaryController {
         for(int i = 0; i < givenWord.size(); i++) {
             Character letter = givenWord.get(i);
             if(letter == null) continue;
-            if(dictWord.charAt(i) != letter) return false;
+            if(!dictWord.substring(i, i + 1).equalsIgnoreCase(letter.toString())) return false;
         }
         return true;
     }

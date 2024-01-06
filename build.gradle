@@ -11,9 +11,7 @@ java {
 	sourceCompatibility = '17'
 }
 
-springBoot {
-	executable = true
-}
+
 
 repositories {
 	mavenCentral()
